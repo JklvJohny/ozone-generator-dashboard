@@ -1,0 +1,39 @@
+# ─── Node / Next.js ───────────────────────────────────────────
+node_modules/
+.next/
+out/
+.vercel/
+
+# ─── Python / Backend ─────────────────────────────────────────
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.env.local
+*.egg-info/
+dist/
+build/
+
+# ─── PlatformIO / ESP32 ───────────────────────────────────────
+.pio/
+.pioenvs/
+
+# ─── Environment & Secrets ────────────────────────────────────
+# Never commit real credentials
+.env.local
+*.env
+
+# ─── Build Artifacts & Logs ───────────────────────────────────
+*.log
+build_output.txt
+lint*.txt
+errors*.txt
+tsconfig.tsbuildinfo
+
+# ─── IDE & OS ─────────────────────────────────────────────────
+.vscode/settings.json
+.idea/
+*.DS_Store
+Thumbs.db

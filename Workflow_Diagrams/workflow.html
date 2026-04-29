@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Workflow Concepts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 p-8 min-h-screen">
+    <div class="max-w-4xl mx-auto space-y-12">
+        <div class="text-center">
+            <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500 mb-2">Web Workflow Diagrams</h1>
+            <p class="text-gray-400">ภาพรวมการทำงานของระบบเว็บและการพัฒนาเว็บไซต์</p>
+        </div>
+        
+        <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-gray-700">
+            <h2 class="text-2xl font-bold text-cyan-400 mb-6 flex items-center">
+                <span class="text-3xl mr-3">🌐</span> 1. Web Browsing Workflow
+            </h2>
+            <div class="mermaid flex justify-center">
+                graph LR
+                    User[💻 เครื่องของผู้ใช้<br>พิมพ์ URL] -->|1. Request| DNS[🗺️ DNS Server]
+                    DNS -->|2. ได้เลข IP| User
+                    User -->|3. ส่งคำขอ HTTP| Server[🖥️ Web Server]
+                    Server -->|4. ดึงข้อมูล| DB[(🗄️ Database)]
+                    DB -->|5. ส่งข้อมูลกลับ| Server
+                    Server -->|6. ส่ง HTML/CSS/JS| User
+                    User -->|7. โชว์หน้าเว็บ| Screen((✨ แสดงผลหน้าเว็บ))
+            </div>
+            <p class="text-sm text-gray-400 mt-6 text-center">กระบวนการตั้งแต่พิมพ์ URL Browser จนถึงตอนที่หน้าเว็บเปิดขึ้นมา</p>
+        </div>
+
+        <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-gray-700">
+            <h2 class="text-2xl font-bold text-purple-400 mb-6 flex items-center">
+                <span class="text-3xl mr-3">🛠️</span> 2. Web Development Process
+            </h2>
+            <div class="mermaid flex justify-center">
+                graph TD
+                    A[🎨 1. Plan & Design<br>ออกแบบ UX/UI, Figma] --> B[🖥️ 2. Frontend Development<br>HTML, CSS, React, Next.js]
+                    B -.-> C[⚙️ 3. Backend & DB<br>Node.js, Python, MySQL]
+                    C -.-> D[🧪 4. Testing<br>ทดสอบการใช้งาน, หาบั๊ก]
+                    D --> E[🚀 5. Deployment<br>นำขึ้นเซิร์ฟเวอร์จริง AWS, Vercel]
+                    E --> F((✅ เว็บไซต์พร้อมใช้งาน))
+            </div>
+            <p class="text-sm text-gray-400 mt-6 text-center">กระบวนการพัฒนาเว็บไซต์ตั้งแต่เริ่มออกแบบ เขียนโค้ด จนถึงปล่อยขึ้นระบบจริง</p>
+        </div>
+    </div>
+</body>
+</html>

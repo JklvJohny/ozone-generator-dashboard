@@ -1,0 +1,97 @@
+﻿services:
+  mqtt:
+    image: eclipse-mosquitto:2.0
+    container_name: ozone-mqtt
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    restart: unless-stopped
+    networks:
+      - iot-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ozone-backend
+    expose:
+      - "8000"
+    environment:
+      - MQTT_BROKER=mqtt
+      - MQTT_PORT=1883
+    depends_on:
+      - mqtt
+    restart: unless-stopped
+    networks:
+      - iot-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ozone-frontend
+    expose:
+      - "3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    volumes:
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - iot-network
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: ozone-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+    restart: unless-stopped
+    networks:
+      - iot-network
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: ozone-quicktunnel
+    command: tunnel --no-autoupdate --protocol http2 --url http://nginx:80
+    depends_on:
+      - nginx
+    restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    dns_opt:
+      - ndots:0
+    networks:
+      - iot-network
+
+  tunnel-url:
+    image: docker:cli
+    container_name: ozone-tunnel-url
+    depends_on:
+      - cloudflared
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      "
+      echo 'Waiting for Quick Tunnel URL...';
+      until docker logs ozone-quicktunnel 2>&1 | grep -oE 'https://[a-zA-Z0-9-]+\.trycloudflare\.com' | grep -v 'api\.trycloudflare' > /tmp/url.txt && [ -s /tmp/url.txt ]; do
+        sleep 2;
+      done;
+      echo '';
+      echo '================ QUICK TUNNEL ================';
+      cat /tmp/url.txt;
+      echo '=============================================';
+      "
+    restart: "no"
+
+networks:
+  iot-network:
+    driver: bridge
