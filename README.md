@@ -2,6 +2,11 @@
 
 A full-stack IoT monitoring and control system for an ozone generator, built as a university capstone project. The system acquires real-time sensor data from an ESP32 microcontroller and displays it on a live web dashboard.
 
+## Dashboard UI
+![Dashboard Monitor UI](Dashboard_monitor_ui.png)
+
+![Dashboard Setup UI](Dashboard_setup_ui.png)
+
 ---
 
 ## System Architecture
